@@ -1,11 +1,11 @@
 #ifndef HORRORMOVIE_HELPER_H
 #define HORRORMOVIE_HELPER_H
 
+#include <cassert>
+
 typedef int HealthPoints;
 typedef int Age;
 typedef int AttackPower;
-
-#include <cassert>
 
 class Damageable {
 private:

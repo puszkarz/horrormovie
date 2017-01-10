@@ -53,10 +53,18 @@ AttackPower attackSum(std::vector<Monster*> monsters) {
 }
 
 class GroupOfMonsters : public Damageable, public Attacker {
+private:
     std::vector<Monster*> monsters;
 public:
-    GroupOfMonsters(std::vector<Monster*> monsters) : Damageable(healthSum(monsters)), Attacker(attackSum(monsters)), monsters(monsters) {};
-    // TODO: albo listę inicjującą (std::initializer_list)
+    GroupOfMonsters(std::vector<Monster*> monsters) :
+            Damageable(healthSum(monsters)),
+            Attacker(attackSum(monsters)),
+            monsters(monsters) {};
+
+    GroupOfMonsters(std::initializer_list<Monster*> monstersList) :
+            Damageable(healthSum(std::vector<Monster*>(monstersList))),
+            Attacker(attackSum(std::vector<Monster*>(monstersList))),
+            monsters(monstersList) {};
 
     void takeDamage(AttackPower damage) {
         for (Monster* monster : monsters)
