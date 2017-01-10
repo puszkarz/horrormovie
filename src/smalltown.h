@@ -1,12 +1,7 @@
-//
-// Created by bartek on 09.01.17.
-//
-
 #ifndef HORRORMOVIE_SMALLTOWN_H
 #define HORRORMOVIE_SMALLTOWN_H
 
 #include "helper.h"
-
 
 //Klasa SmallTown tworzona za pomocą klasy Builder, dla której można ustawić co
 //        najmniej:
