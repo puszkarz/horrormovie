@@ -1,34 +1,72 @@
 #ifndef HORRORMOVIE_MONSTER_H
 #define HORRORMOVIE_MONSTER_H
 
+#include <vector>
 #include "helper.h"
 
-//Klasy Zombie, Vampire i Mummy przyjmują w konstruktorze HealthPoints health
-//        oraz AttackPower attackPower.
-class Monster : Damageable, Attacker {};
-
-class Zombie : Monster {};
-
-class Vampire : Monster {};
-
-class Mummy : Monster {};
-
-//W sequelu potwory mogą również atakować grupowo. Należy zaimplementować
-//odpowiednią klasę do ataku grupowego GroupOfMonsters, która w konstruktorze
-//        przyjmuje wektor (std::vector) albo listę inicjującą (std::initializer_list)
-//zawierającą potwory, które są w grupie. GroupOfMonsters mają metody publiczne:
-//Health getHealth() – zwraca liczbę punktów życia grupy (suma punktów życia
-//żywych potworów),
-//AttackPower getAttackPower() – zwraca siłę ataku grupy (suma sił ataku żywych
-//        potworów),
-//void takeDamage(AttackPower damage) – zmniejsza liczbę punktów życia każdego
-//        potwora w grupie o damage, ale nie więcej niż potwór ma aktualnie.
-
-class GroupOfMonsters : Damageable, Attacker {
-
+class Monster : public Damageable, public Attacker {
+public:
+    Monster(HealthPoints health, AttackPower attackPower) : Damageable(health), Attacker(attackPower) {};
 };
 
-//Dodatkowo powinny istnieć funkcje fabrykujące dla Zombie, Vampire, Mummy,
-//GroupOfMonsters z sygnaturami pasującymi do przykładu.
+class Zombie : public Monster {
+public:
+    Zombie(HealthPoints health, AttackPower attackPower) : Monster(health, attackPower) {};
+};
+
+class Vampire : public Monster {
+public:
+    Vampire(HealthPoints health, AttackPower attackPower) : Monster(health, attackPower) {};
+};
+
+class Mummy : public Monster {
+public:
+    Mummy(HealthPoints health, AttackPower attackPower) : Monster(health, attackPower) {};
+};
+
+Zombie* createZombie(HealthPoints health, AttackPower attackPower) {
+    return new Zombie(health, attackPower);
+}
+
+Vampire* createVampire(HealthPoints health, AttackPower attackPower) {
+    return new Vampire(health, attackPower);
+}
+
+Mummy* createMummy(HealthPoints health, AttackPower attackPower) {
+    return new Mummy(health, attackPower);
+}
+
+HealthPoints healthSum(std::vector<Monster*> monsters) {
+    HealthPoints sum = 0;
+    for (Monster* monster : monsters) {
+        sum += monster->getHealth();
+    }
+    return sum;
+}
+
+AttackPower attackSum(std::vector<Monster*> monsters) {
+    AttackPower sum = 0;
+    for (Monster* monster : monsters) {
+        sum += monster->getAttackPower();
+    }
+    return sum;
+}
+
+class GroupOfMonsters : public Damageable, public Attacker {
+    std::vector<Monster*> monsters;
+public:
+    GroupOfMonsters(std::vector<Monster*> monsters) : Damageable(healthSum(monsters)), Attacker(attackSum(monsters)), monsters(monsters) {};
+    // TODO: albo listę inicjującą (std::initializer_list)
+
+    void takeDamage(AttackPower damage) {
+        for (Monster* monster : monsters)
+            monster->takeDamage(damage);
+        this->updateHealth(healthSum(monsters));
+    }
+};
+
+GroupOfMonsters* createGroupOfMonsters(std::vector<Monster*> monsters) {
+    return new GroupOfMonsters(monsters);
+}
 
 #endif //HORRORMOVIE_MONSTER_H

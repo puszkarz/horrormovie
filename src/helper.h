@@ -5,12 +5,16 @@ typedef int HealthPoints;
 typedef int Age;
 typedef int AttackPower;
 
+#include <cassert>
+
 class Damageable {
-protected:
+private:
     HealthPoints health;
+protected:
+    void updateHealth(HealthPoints healthUpdated) { health = healthUpdated; };
 public:
-    virtual Damageable() = 0;
-    virtual HealthPoints getHealth() { return health; }
+    Damageable(HealthPoints health) : health(health) {};
+    HealthPoints getHealth() { return health; }
     virtual void takeDamage(AttackPower damage) {
         if (health - damage < 0) health = 0;
         else health -= damage;
@@ -18,10 +22,10 @@ public:
 };
 
 class Attacker {
-protected:
+private:
     AttackPower attackPower;
 public:
-    virtual Attacker() = 0;
+    virtual Attacker(AttackPower attackPower) : attackPower(attackPower) {};
     AttackPower getAttackPower() { return attackPower; }
 };
 
