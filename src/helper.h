@@ -1,11 +1,13 @@
 #ifndef HORRORMOVIE_HELPER_H
 #define HORRORMOVIE_HELPER_H
 
+#include <iostream>
 #include <cassert>
 
-typedef int HealthPoints;
-typedef int Age;
-typedef int AttackPower;
+using HealthPoints = int;
+using Age = int;
+using AttackPower = int;
+using Name = std::string;
 
 class Damageable {
 private:
@@ -14,7 +16,7 @@ protected:
     void updateHealth(HealthPoints healthUpdated) { health = healthUpdated; };
 public:
     Damageable(HealthPoints health) : health(health) {};
-    HealthPoints getHealth() { return health; }
+    virtual HealthPoints getHealth() const { return health; }
     virtual void takeDamage(AttackPower damage) {
         if (health - damage < 0) health = 0;
         else health -= damage;
@@ -25,8 +27,14 @@ class Attacker {
 private:
     AttackPower attackPower;
 public:
-    virtual Attacker(AttackPower attackPower) : attackPower(attackPower) {};
-    AttackPower getAttackPower() { return attackPower; }
+    Attacker(AttackPower attackPower) : attackPower(attackPower) {};
+    virtual AttackPower getAttackPower() const { return attackPower; }
+    virtual Name getName() const {};
+};
+
+class DamageableAttacker : public Damageable, public Attacker {
+public:
+    DamageableAttacker(HealthPoints health, AttackPower attackPower) : Damageable(health), Attacker(attackPower) {}
 };
 
 #endif //HORRORMOVIE_HELPER_H

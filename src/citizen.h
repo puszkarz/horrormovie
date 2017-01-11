@@ -2,13 +2,15 @@
 #define HORRORMOVIE_CITIZEN_H
 
 #include "helper.h"
+#include <iostream>
+#include <memory>
 
 class Citizen : public Damageable {
 private:
     Age age;
 public:
     Citizen(HealthPoints health, Age age) : Damageable(health), age(age) {}
-    Age getAge() { return age; }
+    Age getAge() const { return age; }
 };
 
 class Adult : public Citizen {
@@ -30,16 +32,16 @@ public:
     Sheriff(HealthPoints health, Age age, AttackPower attackPower) : Adult(health, age), Attacker(attackPower) {};
 };
 
-Sheriff* createSheriff(HealthPoints health, Age age, AttackPower attackPower) {
-    return new Sheriff(health, age, attackPower);
+std::shared_ptr<Sheriff> inline createSheriff(HealthPoints health, Age age, AttackPower attackPower) {
+    return std::make_shared<Sheriff>(health, age, attackPower);
 }
 
-Adult* createAdult(HealthPoints health, Age age) {
-    return new Adult(health, age);
+std::shared_ptr<Adult> inline createAdult(HealthPoints health, Age age) {
+    return std::make_shared<Adult>(health, age);
 }
 
-Teenager* createTeenager(HealthPoints health, Age age) {
-    return new Teenager(health, age);
+std::shared_ptr<Teenager> inline createTeenager(HealthPoints health, Age age) {
+    return std::make_shared<Teenager>(health, age);
 }
 
 #endif //HORRORMOVIE_CITIZEN_H

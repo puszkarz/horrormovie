@@ -4,77 +4,82 @@
 #include <vector>
 #include "helper.h"
 
-class Monster : public Damageable, public Attacker {
+class Monster : public DamageableAttacker {
 public:
-    Monster(HealthPoints health, AttackPower attackPower) : Damageable(health), Attacker(attackPower) {};
+    Monster(HealthPoints health, AttackPower attackPower) : DamageableAttacker(health, attackPower) {};
 };
 
 class Zombie : public Monster {
 public:
     Zombie(HealthPoints health, AttackPower attackPower) : Monster(health, attackPower) {};
+    Name getName() { return "Zombie"; }
 };
 
 class Vampire : public Monster {
 public:
     Vampire(HealthPoints health, AttackPower attackPower) : Monster(health, attackPower) {};
+    Name getName() { return "Zombie"; }
 };
 
 class Mummy : public Monster {
 public:
     Mummy(HealthPoints health, AttackPower attackPower) : Monster(health, attackPower) {};
+    Name getName() { return "Zombie"; }
 };
 
-Zombie* createZombie(HealthPoints health, AttackPower attackPower) {
-    return new Zombie(health, attackPower);
+std::shared_ptr<Zombie> createZombie(HealthPoints health, AttackPower attackPower) {
+    return std::make_shared<Zombie>(health, attackPower);
 }
 
-Vampire* createVampire(HealthPoints health, AttackPower attackPower) {
-    return new Vampire(health, attackPower);
+std::shared_ptr<Vampire> createVampire(HealthPoints health, AttackPower attackPower) {
+    return std::make_shared<Vampire>(health, attackPower);
 }
 
-Mummy* createMummy(HealthPoints health, AttackPower attackPower) {
-    return new Mummy(health, attackPower);
+std::shared_ptr<Mummy> createMummy(HealthPoints health, AttackPower attackPower) {
+    return std::make_shared<Mummy>(health, attackPower);
 }
 
-HealthPoints healthSum(std::vector<Monster*> monsters) {
-    HealthPoints sum = 0;
-    for (Monster* monster : monsters) {
-        sum += monster->getHealth();
-    }
-    return sum;
-}
 
-AttackPower attackSum(std::vector<Monster*> monsters) {
-    AttackPower sum = 0;
-    for (Monster* monster : monsters) {
-        sum += monster->getAttackPower();
-    }
-    return sum;
-}
-
-class GroupOfMonsters : public Damageable, public Attacker {
+class GroupOfMonsters : public DamageableAttacker  {
 private:
-    std::vector<Monster*> monsters;
+    std::vector<std::shared_ptr<Monster> > monsters;
 public:
-    GroupOfMonsters(std::vector<Monster*> monsters) :
-            Damageable(healthSum(monsters)),
-            Attacker(attackSum(monsters)),
+    GroupOfMonsters(std::vector<std::shared_ptr<Monster>> monsters) :
+            DamageableAttacker(getHealth(), getAttackPower()),
             monsters(monsters) {};
 
-    GroupOfMonsters(std::initializer_list<Monster*> monstersList) :
-            Damageable(healthSum(std::vector<Monster*>(monstersList))),
-            Attacker(attackSum(std::vector<Monster*>(monstersList))),
+    GroupOfMonsters(std::initializer_list<std::shared_ptr<Monster> > monstersList) :
+            DamageableAttacker(getHealth(), getAttackPower()),
             monsters(monstersList) {};
 
+    Name getName() const { return "GroupOfMonsters"; }
+
     void takeDamage(AttackPower damage) {
-        for (Monster* monster : monsters)
+        for (auto monster : monsters)
             monster->takeDamage(damage);
-        this->updateHealth(healthSum(monsters));
+        this->updateHealth(getHealth());
     }
+
+    HealthPoints getHealth() const {
+        HealthPoints sum = 0;
+        for (auto monster : monsters) {
+            sum += monster->getHealth();
+        }
+        return sum;
+    }
+
+    AttackPower getAttackPower() const {
+        AttackPower sum = 0;
+        for (auto monster : monsters) {
+            sum += monster->getAttackPower();
+        }
+        return sum;
+    }
+
 };
 
-GroupOfMonsters* createGroupOfMonsters(std::vector<Monster*> monsters) {
-    return new GroupOfMonsters(monsters);
+std::shared_ptr<GroupOfMonsters> createGroupOfMonsters(std::vector<std::shared_ptr<Monster> > monsters) {
+    return std::make_shared<GroupOfMonsters>(monsters);
 }
 
 #endif //HORRORMOVIE_MONSTER_H

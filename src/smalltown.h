@@ -2,6 +2,70 @@
 #define HORRORMOVIE_SMALLTOWN_H
 
 #include "helper.h"
+#include "citizen.h"
+#include <iostream>
+#include <vector>
+#include <memory>
+
+using Time = int;
+
+class Status {
+private:
+    std::shared_ptr<DamageableAttacker> _attacker;
+    unsigned int _aliveCitizensNumber;
+public:
+    Status (std::shared_ptr<DamageableAttacker> attacker, unsigned int aliveCitizensNumber);
+    Name getMonsterName() const;
+    HealthPoints getMonsterHealth() const;
+    unsigned int getAliveCitizens() const;
+};
+
+class AttackStrategy {
+public:
+    virtual bool attackTime(Time time) = 0;
+};
+
+class DefaultStrategy : public AttackStrategy {
+public:
+    bool attackTime(Time time);
+};
+
+class SmallTown {
+private:
+    unsigned int _aliveCitizensNumber;
+    std::shared_ptr<DamageableAttacker> _attacker;
+    std::vector<std::shared_ptr<Citizen> > _citizens;
+    Time _currentTime;
+    Time _maxTime;
+    std::shared_ptr<AttackStrategy> _attackStrategy;
+    void attackTown();
+    SmallTown (std::shared_ptr<DamageableAttacker> attacker,
+               Time startTime,
+               Time maxTime,
+               std::shared_ptr<AttackStrategy> attackStrategy,
+               std::vector<std::shared_ptr<Citizen>> citizens);
+public:
+    class Builder;
+    Status getStatus();
+    void tick(Time timeStep);
+};
+
+class SmallTown::Builder {
+private:
+    std::shared_ptr<DamageableAttacker> _attacker;
+    std::vector<std::shared_ptr<Citizen>> _citizens;
+    Time _t0;
+    Time _t1;
+    std::shared_ptr<AttackStrategy> _attackStrategy = std::make_shared<DefaultStrategy>();
+public:
+    Builder& startTime(Time startTime);
+    Builder& maxTime(Time maxTime);
+    Builder& citizen(std::shared_ptr<Citizen> citizen);
+    Builder& monster(std::shared_ptr<DamageableAttacker> attacker);
+    Builder& strategy(std::shared_ptr<AttackStrategy> strategy);
+    SmallTown build();
+};
+
 
 //Klasa SmallTown tworzona za pomocą klasy Builder, dla której można ustawić co
 //        najmniej:
