@@ -1,5 +1,4 @@
 #include "smalltown.h"
-#include "helper.h"
 
 Status::Status(std::shared_ptr<DamageableAttacker> attacker, unsigned int aliveCitizensNumber) : _attacker(attacker), _aliveCitizensNumber(aliveCitizensNumber) {}
 unsigned int Status::getAliveCitizens() const { return _aliveCitizensNumber; }
@@ -27,11 +26,17 @@ void SmallTown::tick(Time timeStep) {
 }
 
 void SmallTown::attackTown() {
-
+    for (auto citizen : _citizens) {
+        citizen->attack(_attacker);
+        if (!citizen->isAlive())
+            _aliveCitizensNumber--;
+    }
 }
 
 SmallTown::SmallTown(std::shared_ptr<DamageableAttacker> attacker, Time startTime, Time maxTime, std::shared_ptr<AttackStrategy> attackStrategy,
-                     std::vector<std::shared_ptr<Citizen> > citizens) : _attacker(attacker), _currentTime(startTime), _maxTime(maxTime), _citizens(citizens), _attackStrategy(attackStrategy) {}
+                     std::vector<std::shared_ptr<Citizen> > citizens) : _attacker(attacker), _currentTime(startTime), _maxTime(maxTime), _citizens(citizens),
+                                                                        _attackStrategy(attackStrategy),
+                                                                        _aliveCitizensNumber(static_cast<unsigned int>(citizens.size())) {}
 
 SmallTown::Builder& SmallTown::Builder::citizen(std::shared_ptr<Citizen> citizen) {
     this->_citizens.push_back(citizen);
@@ -59,5 +64,5 @@ SmallTown::Builder & SmallTown::Builder::strategy(std::shared_ptr<AttackStrategy
 }
 
 bool DefaultStrategy::attackTime(Time time) {
-    return (time % 7) && (time % 3 == 0 || time % 13 == 0);
+    return (time % 7 != 0) && (time % 3 == 0 || time % 13 == 0);
 }

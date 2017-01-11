@@ -11,6 +11,9 @@ private:
 public:
     Citizen(HealthPoints health, Age age) : Damageable(health), age(age) {}
     Age getAge() const { return age; }
+    virtual void attack(std::shared_ptr<DamageableAttacker> attacker) {
+        takeDamage(attacker->getAttackPower());
+    }
 };
 
 class Adult : public Citizen {
@@ -30,6 +33,10 @@ public:
 class Sheriff : public Adult, public Attacker {
 public:
     Sheriff(HealthPoints health, Age age, AttackPower attackPower) : Adult(health, age), Attacker(attackPower) {};
+    void attack(std::shared_ptr<DamageableAttacker> attacker) {
+        takeDamage(attacker->getAttackPower());
+        attacker->takeDamage(getAttackPower());
+    }
 };
 
 std::shared_ptr<Sheriff> inline createSheriff(HealthPoints health, Age age, AttackPower attackPower) {

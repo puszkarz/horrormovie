@@ -57,6 +57,7 @@ public:
     void takeDamage(AttackPower damage) {
         for (auto monster : monsters)
             monster->takeDamage(damage);
+
         this->updateHealth(getHealth());
     }
 
@@ -71,7 +72,8 @@ public:
     AttackPower getAttackPower() const {
         AttackPower sum = 0;
         for (auto monster : monsters) {
-            sum += monster->getAttackPower();
+            if (monster->isAlive())
+                sum += monster->getAttackPower();
         }
         return sum;
     }

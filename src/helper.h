@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <cassert>
+#include <memory>
 
 using HealthPoints = int;
 using Age = int;
@@ -21,6 +22,7 @@ public:
         if (health - damage < 0) health = 0;
         else health -= damage;
     }
+    bool isAlive() { return health > 0; }
 };
 
 class Attacker {
