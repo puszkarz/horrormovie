@@ -23,6 +23,7 @@ void SmallTown::tick(Time timeStep) {
 }
 
 void SmallTown::attackTown() {
+    std::cout << " Attack !!!" << std::endl;
     for (auto citizen : _citizens) {
         citizen->attack(_attacker);
         if (!citizen->isAlive())

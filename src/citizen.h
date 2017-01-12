@@ -7,7 +7,7 @@
 
 class Citizen : public Damageable {
 private:
-    Age age;
+    Age _age;
 public:
     Citizen(HealthPoints health, Age age);
     Age getAge() const;

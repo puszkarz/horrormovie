@@ -1,8 +1,8 @@
 #include "citizen.h"
 
-Citizen::Citizen(HealthPoints health, Age age) : Damageable(health), age(age) {}
+Citizen::Citizen(HealthPoints health, Age age) : Damageable(health), _age(age) {}
 
-Age Citizen::getAge() const { return age; }
+Age Citizen::getAge() const { return _age; }
 
 void Citizen::attack(std::shared_ptr<DamageableAttacker> attacker) {
     takeDamage(attacker->getAttackPower());

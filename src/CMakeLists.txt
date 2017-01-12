@@ -10,4 +10,13 @@ set(SOURCE_FILES
     monster.h
     smalltown.h smalltown.cc monster.cc citizen.cc helper.cc)
 
+set(TEST1
+        citizen.h
+        helper.h
+        test1.cc
+        monster.h
+        smalltown.h smalltown.cc monster.cc citizen.cc helper.cc)
+
+
 add_executable(src ${SOURCE_FILES})
+add_executable(test1 ${TEST1})

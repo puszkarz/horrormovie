@@ -12,7 +12,7 @@ using Name = std::string;
 
 class Damageable {
 private:
-    HealthPoints health;
+    HealthPoints _health;
 protected:
     void updateHealth(HealthPoints healthUpdated);
 public:
@@ -27,7 +27,7 @@ public:
 
 class Attacker {
 private:
-    AttackPower attackPower;
+    AttackPower _attackPower;
 public:
     Attacker(AttackPower attackPower);
     virtual AttackPower getAttackPower() const;
