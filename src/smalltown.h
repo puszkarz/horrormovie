@@ -33,11 +33,20 @@ public:
     bool attackTime(Time time);
 };
 
+class TownClock {
+private:
+    Time _currentTime;
+    Time _maxTime;
+public:
+    TownClock(Time startTime, Time maxTime);
+    void makeStep(Time timeStep);
+    Time getCurrentTime() const;
+};
+
 class SmallTown {
 private:
     std::shared_ptr<DamageableAttacker> _attacker;
-    Time _currentTime;
-    Time _maxTime;
+    TownClock _clock;
     std::shared_ptr<AttackStrategy> _attackStrategy;
     std::vector<std::shared_ptr<Citizen> > _citizens;
     unsigned int _aliveCitizensNumber;
@@ -64,16 +73,17 @@ public:
     void tick(Time timeStep);
 };
 
+
 class SmallTown::Builder {
 private:
     std::shared_ptr<DamageableAttacker> _attacker;
     std::vector<std::shared_ptr<Citizen>> _citizens;
     Time _t0;
     Time _t1;
+    std::shared_ptr<AttackStrategy> _attackStrategy = std::make_shared<DefaultStrategy>();
     /**
      * Strategy - determine the time for the attack.
      */
-    std::shared_ptr<AttackStrategy> _attackStrategy = std::make_shared<DefaultStrategy>();
 public:
     Builder& startTime(Time startTime);
     Builder& maxTime(Time maxTime);

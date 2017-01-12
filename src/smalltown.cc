@@ -17,9 +17,10 @@ void SmallTown::tick(Time timeStep) {
         std::cout << "MONSTER WON" << std::endl;
     else if (status.getMonsterHealth() == 0)
         std::cout << "CITIZENS WON" << std::endl;
-    else if (_attackStrategy->attackTime(_currentTime))
+    else if (_attackStrategy->attackTime(_clock.getCurrentTime()))
         attackTown();
-    _currentTime = (_currentTime + timeStep) % (_maxTime + 1);
+
+    _clock.makeStep(timeStep);
 }
 
 void SmallTown::attackTown() {
@@ -32,7 +33,7 @@ void SmallTown::attackTown() {
 }
 
 SmallTown::SmallTown(std::shared_ptr<DamageableAttacker> attacker, Time startTime, Time maxTime, std::shared_ptr<AttackStrategy> attackStrategy,
-                     const std::vector<std::shared_ptr<Citizen> > &citizens) : _attacker(attacker), _currentTime(startTime), _maxTime(maxTime),
+                     const std::vector<std::shared_ptr<Citizen> > &citizens) : _attacker(attacker), _clock(startTime, maxTime),
                                                                         _attackStrategy(attackStrategy), _citizens(citizens),
                                                                         _aliveCitizensNumber(static_cast<unsigned int>(citizens.size())) {}
 
@@ -67,3 +68,11 @@ SmallTown::Builder & SmallTown::Builder::strategy(std::shared_ptr<AttackStrategy
 bool DefaultStrategy::attackTime(Time time) {
     return (time % 7 != 0) && (time % 3 == 0 || time % 13 == 0);
 }
+
+TownClock::TownClock(Time startTime, Time maxTime) : _currentTime(startTime), _maxTime(maxTime) {}
+
+void TownClock::makeStep(Time timeStep) {
+    _currentTime = (_currentTime + timeStep) % (_maxTime + 1);
+}
+
+Time TownClock::getCurrentTime() const { return _currentTime; }
