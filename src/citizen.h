@@ -33,7 +33,7 @@ public:
      * Simulate the attack on the sheriff - sheriff also attack the monster.
      */
     Sheriff(HealthPoints health, Age age, AttackPower attackPower);
-    void attack(std::shared_ptr<DamageableAttacker> attacker);
+    void attack(std::shared_ptr<DamageableAttacker> attacker) override;
 };
 
 std::shared_ptr<Sheriff> createSheriff(HealthPoints health, Age age, AttackPower attackPower);

@@ -49,7 +49,7 @@ private:
                Time startTime,
                Time maxTime,
                std::shared_ptr<AttackStrategy> attackStrategy,
-               std::vector<std::shared_ptr<Citizen>> citizens);
+               const std::vector<std::shared_ptr<Citizen>> &citizens);
 public:
     class Builder;
     /**
