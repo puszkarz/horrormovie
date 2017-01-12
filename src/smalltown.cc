@@ -34,8 +34,8 @@ void SmallTown::attackTown() {
 }
 
 SmallTown::SmallTown(std::shared_ptr<DamageableAttacker> attacker, Time startTime, Time maxTime, std::shared_ptr<AttackStrategy> attackStrategy,
-                     std::vector<std::shared_ptr<Citizen> > citizens) : _attacker(attacker), _currentTime(startTime), _maxTime(maxTime), _citizens(citizens),
-                                                                        _attackStrategy(attackStrategy),
+                     std::vector<std::shared_ptr<Citizen> > citizens) : _attacker(attacker), _currentTime(startTime), _maxTime(maxTime),
+                                                                        _attackStrategy(attackStrategy), _citizens(citizens),
                                                                         _aliveCitizensNumber(static_cast<unsigned int>(citizens.size())) {}
 
 SmallTown::Builder& SmallTown::Builder::citizen(std::shared_ptr<Citizen> citizen) {

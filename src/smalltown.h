@@ -22,6 +22,9 @@ public:
 
 class AttackStrategy {
 public:
+    /**
+     * Check if at the given time town is attacked.
+     */
     virtual bool attackTime(Time time) = 0;
 };
 
@@ -32,12 +35,15 @@ public:
 
 class SmallTown {
 private:
-    unsigned int _aliveCitizensNumber;
     std::shared_ptr<DamageableAttacker> _attacker;
-    std::vector<std::shared_ptr<Citizen> > _citizens;
     Time _currentTime;
     Time _maxTime;
     std::shared_ptr<AttackStrategy> _attackStrategy;
+    std::vector<std::shared_ptr<Citizen> > _citizens;
+    unsigned int _aliveCitizensNumber;
+    /**
+     * Simulation of the attack on the town.
+     */
     void attackTown();
     SmallTown (std::shared_ptr<DamageableAttacker> attacker,
                Time startTime,
@@ -46,7 +52,15 @@ private:
                std::vector<std::shared_ptr<Citizen>> citizens);
 public:
     class Builder;
+    /**
+     * Return the status class with the information about the name of the attacker, its health points
+     * and the population of the town.
+     */
     Status getStatus();
+    /**
+     * Move in time within the timeStep. Check if the town or monster won or there is a draw.
+     * If the current time is the attack time, then simulate the attack on the town.
+     */
     void tick(Time timeStep);
 };
 
@@ -56,6 +70,9 @@ private:
     std::vector<std::shared_ptr<Citizen>> _citizens;
     Time _t0;
     Time _t1;
+    /**
+     * Strategy - determine the time for the attack.
+     */
     std::shared_ptr<AttackStrategy> _attackStrategy = std::make_shared<DefaultStrategy>();
 public:
     Builder& startTime(Time startTime);

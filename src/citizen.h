@@ -9,46 +9,37 @@ class Citizen : public Damageable {
 private:
     Age age;
 public:
-    Citizen(HealthPoints health, Age age) : Damageable(health), age(age) {}
-    Age getAge() const { return age; }
-    virtual void attack(std::shared_ptr<DamageableAttacker> attacker) {
-        takeDamage(attacker->getAttackPower());
-    }
+    Citizen(HealthPoints health, Age age);
+    Age getAge() const;
+    /**
+     * Simulate the attack on the citizen.
+     */
+    virtual void attack(std::shared_ptr<DamageableAttacker> attacker);
 };
 
 class Adult : public Citizen {
 public:
-    Adult(HealthPoints health, Age age) : Citizen(health, age) {
-        assert(this->getAge() >= 18 && this->getAge() <= 100);
-    };
+    Adult(HealthPoints health, Age age);
 };
 
 class Teenager : public Citizen {
 public:
-    Teenager(HealthPoints health, Age age) : Citizen(health, age) {
-        assert(this->getAge() >= 11 && this->getAge() <= 17);
-    };
+    Teenager(HealthPoints health, Age age);
 };
 
 class Sheriff : public Adult, public Attacker {
 public:
-    Sheriff(HealthPoints health, Age age, AttackPower attackPower) : Adult(health, age), Attacker(attackPower) {};
-    void attack(std::shared_ptr<DamageableAttacker> attacker) {
-        takeDamage(attacker->getAttackPower());
-        attacker->takeDamage(getAttackPower());
-    }
+    /**
+     * Simulate the attack on the sheriff - sheriff also attack the monster.
+     */
+    Sheriff(HealthPoints health, Age age, AttackPower attackPower);
+    void attack(std::shared_ptr<DamageableAttacker> attacker);
 };
 
-std::shared_ptr<Sheriff> inline createSheriff(HealthPoints health, Age age, AttackPower attackPower) {
-    return std::make_shared<Sheriff>(health, age, attackPower);
-}
+std::shared_ptr<Sheriff> createSheriff(HealthPoints health, Age age, AttackPower attackPower);
 
-std::shared_ptr<Adult> inline createAdult(HealthPoints health, Age age) {
-    return std::make_shared<Adult>(health, age);
-}
+std::shared_ptr<Adult> createAdult(HealthPoints health, Age age);
 
-std::shared_ptr<Teenager> inline createTeenager(HealthPoints health, Age age) {
-    return std::make_shared<Teenager>(health, age);
-}
+std::shared_ptr<Teenager> createTeenager(HealthPoints health, Age age);
 
 #endif //HORRORMOVIE_CITIZEN_H

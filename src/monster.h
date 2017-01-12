@@ -6,82 +6,49 @@
 
 class Monster : public DamageableAttacker {
 public:
-    Monster(HealthPoints health, AttackPower attackPower) : DamageableAttacker(health, attackPower) {};
+    Monster(HealthPoints health, AttackPower attackPower);
 };
 
 class Zombie : public Monster {
 public:
-    Zombie(HealthPoints health, AttackPower attackPower) : Monster(health, attackPower) {};
-    Name getName() { return "Zombie"; }
+    Zombie(HealthPoints health, AttackPower attackPower);
+    Name getName() const;
 };
 
 class Vampire : public Monster {
 public:
-    Vampire(HealthPoints health, AttackPower attackPower) : Monster(health, attackPower) {};
-    Name getName() { return "Zombie"; }
+    Vampire(HealthPoints health, AttackPower attackPower);
+    Name getName() const;
 };
 
 class Mummy : public Monster {
 public:
-    Mummy(HealthPoints health, AttackPower attackPower) : Monster(health, attackPower) {};
-    Name getName() { return "Zombie"; }
+    Mummy(HealthPoints health, AttackPower attackPower);
+    Name getName() const;
 };
 
-std::shared_ptr<Zombie> createZombie(HealthPoints health, AttackPower attackPower) {
-    return std::make_shared<Zombie>(health, attackPower);
-}
+std::shared_ptr<Zombie> createZombie(HealthPoints health, AttackPower attackPower);
 
-std::shared_ptr<Vampire> createVampire(HealthPoints health, AttackPower attackPower) {
-    return std::make_shared<Vampire>(health, attackPower);
-}
+std::shared_ptr<Vampire> createVampire(HealthPoints health, AttackPower attackPower);
 
-std::shared_ptr<Mummy> createMummy(HealthPoints health, AttackPower attackPower) {
-    return std::make_shared<Mummy>(health, attackPower);
-}
+std::shared_ptr<Mummy> createMummy(HealthPoints health, AttackPower attackPower);
 
 
 class GroupOfMonsters : public DamageableAttacker  {
 private:
     std::vector<std::shared_ptr<Monster> > monsters;
 public:
-    GroupOfMonsters(std::vector<std::shared_ptr<Monster>> monsters) :
-            DamageableAttacker(getHealth(), getAttackPower()),
-            monsters(monsters) {};
+    GroupOfMonsters(std::vector<std::shared_ptr<Monster>> monsters);
+    GroupOfMonsters(std::initializer_list<std::shared_ptr<Monster> > monstersList);
 
-    GroupOfMonsters(std::initializer_list<std::shared_ptr<Monster> > monstersList) :
-            DamageableAttacker(getHealth(), getAttackPower()),
-            monsters(monstersList) {};
+    Name getName() const;
 
-    Name getName() const { return "GroupOfMonsters"; }
+    void takeDamage(AttackPower damage);
 
-    void takeDamage(AttackPower damage) {
-        for (auto monster : monsters)
-            monster->takeDamage(damage);
+    HealthPoints getHealth() const;
 
-        this->updateHealth(getHealth());
-    }
-
-    HealthPoints getHealth() const {
-        HealthPoints sum = 0;
-        for (auto monster : monsters) {
-            sum += monster->getHealth();
-        }
-        return sum;
-    }
-
-    AttackPower getAttackPower() const {
-        AttackPower sum = 0;
-        for (auto monster : monsters) {
-            if (monster->isAlive())
-                sum += monster->getAttackPower();
-        }
-        return sum;
-    }
-
+    AttackPower getAttackPower() const;
 };
 
-std::shared_ptr<GroupOfMonsters> createGroupOfMonsters(std::vector<std::shared_ptr<Monster> > monsters) {
-    return std::make_shared<GroupOfMonsters>(monsters);
-}
-
+std::shared_ptr<GroupOfMonsters> createGroupOfMonsters(std::vector<std::shared_ptr<Monster> > monsters);
 #endif //HORRORMOVIE_MONSTER_H
