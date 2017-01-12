@@ -18,6 +18,9 @@ protected:
 public:
     Damageable(HealthPoints health);
     virtual HealthPoints getHealth() const;
+    /**
+     * Take health points from the unit.
+     */
     virtual void takeDamage(AttackPower damage);
     bool isAlive() const;
 };

@@ -22,7 +22,7 @@ void SmallTown::tick(Time timeStep) {
         else
             attackTown();
     }
-    _currentTime = (_currentTime + timeStep) % _maxTime;
+    _currentTime = (_currentTime + timeStep) % (_maxTime + 1);
 }
 
 void SmallTown::attackTown() {
