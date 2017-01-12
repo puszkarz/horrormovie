@@ -2,7 +2,7 @@
 
 void Damageable::updateHealth(HealthPoints healthUpdated) { health = healthUpdated; };
 
-Damageable::Damageable(HealthPoints health) : health(health) {};
+Damageable::Damageable(HealthPoints health) : health(health) { assert(health > 0); };
 
 HealthPoints Damageable::getHealth() const { return health; }
 
@@ -13,7 +13,9 @@ void Damageable::takeDamage(AttackPower damage) {
 
 bool Damageable::isAlive() const { return health > 0; }
 
-Attacker::Attacker(AttackPower attackPower) : attackPower(attackPower) {};
+Attacker::Attacker(AttackPower attackPower) : attackPower(attackPower) {
+    assert(attackPower >= 0);
+};
 
 AttackPower Attacker::getAttackPower() const { return attackPower; }
 

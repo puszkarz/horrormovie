@@ -37,6 +37,9 @@ std::shared_ptr<Mummy> createMummy(HealthPoints health, AttackPower attackPower)
 class GroupOfMonsters : public DamageableAttacker  {
 private:
     std::vector<std::shared_ptr<Monster> > monsters;
+    static HealthPoints calcHealth(const std::vector<std::shared_ptr<Monster>> monsters);
+    static AttackPower calcAttackPower(const std::vector<std::shared_ptr<Monster>> monsters);
+
 public:
     GroupOfMonsters(std::vector<std::shared_ptr<Monster>> monsters);
     GroupOfMonsters(std::initializer_list<std::shared_ptr<Monster> > monstersList);

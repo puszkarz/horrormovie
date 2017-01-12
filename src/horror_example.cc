@@ -29,10 +29,17 @@ int main(int argc, const char * argv[]) {
             .citizen(citiz)
             .build();
 
+    auto status = smallTown.getStatus();
+
+    assert(status.getMonsterName() == "GroupOfMonsters");
+    assert(status.getMonsterHealth() == 140);
+    assert(status.getAliveCitizens() == 3);
+
     smallTown.tick(18);
     smallTown.tick(3);
 
-    auto status = smallTown.getStatus();
+    status = smallTown.getStatus();
+
     assert(status.getMonsterName() == "GroupOfMonsters");
     assert(status.getMonsterHealth() == 80);
     assert(status.getAliveCitizens() == 3);

@@ -1,6 +1,6 @@
 #include "monster.h"
 
-Monster::Monster(HealthPoints health, AttackPower attackPower) : DamageableAttacker(health, attackPower) { }
+Monster::Monster(HealthPoints health, AttackPower attackPower) : DamageableAttacker(health, attackPower) {}
 
 Zombie::Zombie(HealthPoints health, AttackPower attackPower) : Monster(health, attackPower) {};
 Name Zombie::getName() const { return "Zombie"; }
@@ -24,11 +24,11 @@ std::shared_ptr<Mummy> createMummy(HealthPoints health, AttackPower attackPower)
 }
 
 GroupOfMonsters::GroupOfMonsters(std::vector<std::shared_ptr<Monster>> monsters) :
-    DamageableAttacker(getHealth(), getAttackPower()),
+    DamageableAttacker(GroupOfMonsters::calcHealth(monsters), GroupOfMonsters::calcAttackPower(monsters)),
     monsters(monsters) {};
 
 GroupOfMonsters::GroupOfMonsters(std::initializer_list<std::shared_ptr<Monster> > monstersList) :
-    DamageableAttacker(getHealth(), getAttackPower()),
+    DamageableAttacker(GroupOfMonsters::calcHealth(monsters), GroupOfMonsters::calcAttackPower(monsters)),
     monsters(monstersList) {};
 
 Name GroupOfMonsters::getName() const { return "GroupOfMonsters"; }
@@ -36,11 +36,10 @@ Name GroupOfMonsters::getName() const { return "GroupOfMonsters"; }
 void GroupOfMonsters::takeDamage(AttackPower damage) {
     for (auto monster : monsters)
         monster->takeDamage(damage);
-
-    this->updateHealth(getHealth());
+    this->updateHealth(this->getHealth());
 }
 
-HealthPoints GroupOfMonsters::getHealth() const {
+HealthPoints GroupOfMonsters::calcHealth(const std::vector<std::shared_ptr<Monster>> monsters) {
     HealthPoints sum = 0;
     for (auto monster : monsters) {
         sum += monster->getHealth();
@@ -48,13 +47,21 @@ HealthPoints GroupOfMonsters::getHealth() const {
     return sum;
 }
 
-AttackPower GroupOfMonsters::getAttackPower() const {
+AttackPower GroupOfMonsters::calcAttackPower(const std::vector<std::shared_ptr<Monster>> monsters) {
     AttackPower sum = 0;
     for (auto monster : monsters) {
         if (monster->isAlive())
             sum += monster->getAttackPower();
     }
     return sum;
+}
+
+HealthPoints GroupOfMonsters::getHealth() const {
+    return GroupOfMonsters::calcHealth(monsters);
+}
+
+AttackPower GroupOfMonsters::getAttackPower() const {
+    return GroupOfMonsters::calcAttackPower(monsters);
 }
 
 
