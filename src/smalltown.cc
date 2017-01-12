@@ -10,18 +10,15 @@ Status SmallTown::getStatus() {
 }
 
 void SmallTown::tick(Time timeStep) {
-    if (_attackStrategy->attackTime(_currentTime)) {
-        Status status = getStatus();
-
-        if (status.getAliveCitizens() == 0 && status.getMonsterHealth() == 0)
-            std::cout << "DRAW" << std::endl;
-        else if (status.getAliveCitizens() == 0)
-            std::cout << "MONSTER WON" << std::endl;
-        else if (status.getMonsterHealth() == 0)
-            std::cout << "CITIZENS WON" << std::endl;
-        else
-            attackTown();
-    }
+    Status status = this->getStatus();
+    if (status.getAliveCitizens() == 0 && status.getMonsterHealth() == 0)
+        std::cout << "DRAW" << std::endl;
+    else if (status.getAliveCitizens() == 0)
+        std::cout << "MONSTER WON" << std::endl;
+    else if (status.getMonsterHealth() == 0)
+        std::cout << "CITIZENS WON" << std::endl;
+    else if (_attackStrategy->attackTime(_currentTime))
+        attackTown();
     _currentTime = (_currentTime + timeStep) % (_maxTime + 1);
 }
 
