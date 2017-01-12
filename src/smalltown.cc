@@ -39,6 +39,9 @@ SmallTown::SmallTown(std::shared_ptr<DamageableAttacker> attacker, Time startTim
                                                                         _aliveCitizensNumber(static_cast<unsigned int>(citizens.size())) {}
 
 SmallTown::Builder& SmallTown::Builder::citizen(std::shared_ptr<Citizen> citizen) {
+    for(auto citiz : _citizens)
+        if (citiz == citizen) //Such citizen already exists
+            return *this;
     this->_citizens.push_back(citizen);
     return *this;
 }

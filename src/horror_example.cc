@@ -16,13 +16,17 @@ int main(int argc, const char * argv[]) {
                                                          createZombie(20, 1),
                                                          createVampire(30, 1)
                                                  });
+
+    auto citiz = createAdult(100, 21);
+
     auto smallTown = SmallTown::Builder()
             .monster(groupOfMonsters)
             .startTime(3)
             .maxTime(27)
             .citizen(createSheriff(100, 35, 20))
-            .citizen(createAdult(100, 21))
+            .citizen(citiz)
             .citizen(createTeenager(50, 14))
+            .citizen(citiz)
             .build();
 
     smallTown.tick(18);
@@ -32,6 +36,8 @@ int main(int argc, const char * argv[]) {
     assert(status.getMonsterName() == "GroupOfMonsters");
     assert(status.getMonsterHealth() == 80);
     assert(status.getAliveCitizens() == 3);
+
+    std::cout << "OK!\n";
 
     return 0;
 }
